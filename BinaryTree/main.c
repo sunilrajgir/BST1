@@ -58,7 +58,7 @@ int checkMirrorTree(struct node *r1, struct node *r2) {
         return 0;
     } else {
         if (r1 -> data == r2 -> data) {
-            return (checkMirrorTree(r1 -> left, r2 -> right)) /*|| (checkMirrorTree(r1 ->right, r2 ->left))*/;
+            return (checkMirrorTree(r1 -> left, r2 -> right)) && (checkMirrorTree(r1 ->right, r2 ->left));
         } else {
             return 0;
         }
@@ -74,6 +74,33 @@ struct node * mirrorTree(struct node *root) {
         root ->right = temp;
     }
     return root;
+}
+
+void printPredSucc(struct node *root, int value) {
+    static int flag = 0;
+    static int flag2 = 0;
+    if (root == NULL) {
+        return;
+    } else {
+        if (root -> data == value) {
+            flag = 1;
+        }
+        printPredSucc(root -> left, value);
+        if (flag == 1) {
+            printf("pred: %d",root ->data);
+            flag = 0;
+        }
+        if (root -> data == value) {
+            printf(" value: %d", root -> data);
+            flag2 = 1;
+        }
+        printPredSucc(root -> right, value);
+        if (flag2 == 1) {
+            printf("succ: %d",root ->data);
+            flag2 = 0;
+        }
+        
+    }
 }
 
 int main(int argc, const char * argv[]) {
@@ -96,16 +123,7 @@ int main(int argc, const char * argv[]) {
     insert(&root1,3);
     printf("\n tree1\n");
     print(root1);
-    insert(&root2,1);
-    insert(&root2,2);
-    insert(&root2,3);
-    insert(&root2,4);
-    insert(&root2,5);
-    insert(&root2,6);
-    insert(&root2,7);
-    insert(&root2,8);
-    printf(" \n tree2\n");
-    print(root2);
+    printPredSucc(root1, 5);
     struct node *root3 = mirrorTree(root1);
     printf(" \n tree3\n");
     print(root3);
